@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node --version)",
+      "Bash(npm --version)",
+      "Bash(sw_vers)",
+      "Bash(test -f \"/Users/shay/Workplace/PhoenixPanel/package.json\" && echo \"package.json exists\" || echo \"package.json does NOT exist\")",
+      "Bash(test -d \"/Users/shay/Workplace/PhoenixPanel/node_modules\" && echo \"node_modules exists\" || echo \"node_modules does NOT exist\")",
+      "Bash(test -d \"/Users/shay/Workplace/PhoenixPanel/src\" && echo \"src directory exists\" || echo \"src directory does NOT exist\")",
+      "WebFetch(domain:docs.wandb.ai)"
+    ]
+  }
+}

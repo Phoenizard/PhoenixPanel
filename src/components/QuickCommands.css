@@ -1,0 +1,147 @@
+.quick-commands {
+  border-top: 1px solid rgba(128, 128, 128, 0.12);
+}
+
+.section-toggle {
+  width: 100%;
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px 8px;
+  cursor: pointer;
+}
+
+.toggle-arrow {
+  font-size: 9px;
+  color: var(--text-secondary);
+}
+
+.cmd-list {
+  padding: 0 8px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cmd-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.12s;
+  gap: 8px;
+}
+
+.cmd-row:hover {
+  background: rgba(128, 128, 128, 0.1);
+}
+
+.cmd-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.cmd-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.cmd-command {
+  font-size: 10px;
+  color: var(--text-secondary);
+  font-family: 'SF Mono', 'Menlo', monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cmd-copy {
+  font-size: 13px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  transition: color 0.12s;
+}
+
+.cmd-row:hover .cmd-copy {
+  color: var(--system-blue);
+}
+
+.cmd-divider {
+  height: 1px;
+  background: rgba(128, 128, 128, 0.1);
+  margin: 3px 2px;
+}
+
+.cmd-add-btn {
+  background: none;
+  border: 1px dashed rgba(128, 128, 128, 0.3);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-family: var(--system-font);
+  padding: 6px;
+  width: 100%;
+  cursor: pointer;
+  margin-top: 2px;
+  transition: border-color 0.12s, color 0.12s;
+}
+
+.cmd-add-btn:hover {
+  border-color: var(--system-blue);
+  color: var(--system-blue);
+}
+
+.cmd-add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 4px 2px;
+}
+
+.cmd-input {
+  padding: 5px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(128, 128, 128, 0.3);
+  background: rgba(128, 128, 128, 0.06);
+  color: var(--text-primary);
+  font-size: 12px;
+  font-family: var(--system-font);
+  outline: none;
+}
+
+.cmd-input:focus { border-color: var(--system-blue); }
+
+.cmd-input-mono { font-family: 'SF Mono', 'Menlo', monospace; font-size: 11px; }
+
+.cmd-add-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.cmd-btn {
+  font-size: 12px;
+  font-family: var(--system-font);
+  padding: 4px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+}
+
+.cmd-btn-cancel {
+  background: rgba(128, 128, 128, 0.1);
+  color: var(--text-secondary);
+}
+
+.cmd-btn-save {
+  background: var(--system-blue);
+  color: #fff;
+  font-weight: 500;
+}

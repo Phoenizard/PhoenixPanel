@@ -1,0 +1,122 @@
+.job-card {
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(128, 128, 128, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: background 0.15s;
+}
+
+.job-card:hover {
+  background: rgba(128, 128, 128, 0.12);
+}
+
+.job-card-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.state-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-running   { background-color: var(--system-green); }
+.dot-pending   { background-color: var(--system-yellow); }
+.dot-failed    { background-color: var(--system-red); }
+.dot-completed { background-color: var(--system-gray); }
+.dot-cancelled { background-color: var(--system-gray); }
+
+.job-info {
+  flex: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+}
+
+.job-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.job-id {
+  font-size: 10px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.job-right {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.job-progress {
+  font-size: 11px;
+  color: var(--system-blue);
+  font-variant-numeric: tabular-nums;
+  font-family: 'SF Mono', Menlo, monospace;
+}
+
+.job-time {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.job-card-sub {
+  display: flex;
+  gap: 10px;
+  padding-left: 15px;
+}
+
+.job-meta {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.job-card-actions {
+  display: flex;
+  gap: 6px;
+  padding-left: 15px;
+  margin-top: 2px;
+}
+
+.action-btn {
+  font-size: 11px;
+  font-family: var(--system-font);
+  padding: 2px 8px;
+  border-radius: 5px;
+  border: 1px solid rgba(128, 128, 128, 0.25);
+  background: rgba(128, 128, 128, 0.08);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+  white-space: nowrap;
+}
+
+.action-btn:hover:not(:disabled) {
+  background: rgba(128, 128, 128, 0.18);
+}
+
+.action-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.action-btn-active {
+  background: rgba(0, 122, 255, 0.12);
+  border-color: rgba(0, 122, 255, 0.3);
+  color: var(--system-blue);
+}

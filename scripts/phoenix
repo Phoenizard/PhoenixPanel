@@ -1,0 +1,76 @@
+#!/usr/bin/env python3
+"""PhoenixPanel CLI — query the running app for job/WandB status."""
+
+import json, sys, urllib.request, urllib.error
+
+PORT = 47890
+
+def fetch():
+    try:
+        with urllib.request.urlopen(f"http://127.0.0.1:{PORT}/status", timeout=3) as r:
+            return json.loads(r.read())
+    except urllib.error.URLError:
+        print("\033[31mPhoenixPanel is not running.\033[0m")
+        sys.exit(1)
+
+def fmt_duration(secs):
+    if not secs or secs < 0: return "—"
+    h, rem = divmod(int(secs), 3600)
+    m = rem // 60
+    return f"{h}h {m}m" if h else f"{m}m"
+
+def relative_time(iso):
+    if not iso: return ""
+    from datetime import datetime, timezone
+    diff = datetime.now(timezone.utc) - datetime.fromisoformat(iso.replace("Z", "+00:00"))
+    mins = int(diff.total_seconds() / 60)
+    if mins < 60: return f"{mins}m ago"
+    hrs = mins // 60
+    if hrs < 24: return f"{hrs}h ago"
+    return f"{hrs // 24}d ago"
+
+BOLD="\033[1m"; RESET="\033[0m"
+GREEN="\033[32m"; YELLOW="\033[33m"; RED="\033[31m"; BLUE="\033[34m"; GRAY="\033[90m"
+
+STATE_COLOR = {"RUNNING": GREEN, "PENDING": YELLOW, "FAILED": RED, "COMPLETED": GRAY, "CANCELLED": GRAY}
+WANDB_COLOR = {"running": GREEN, "finished": GRAY, "crashed": RED, "killed": YELLOW}
+WANDB_ICON  = {"running": "⏳", "finished": "✓", "crashed": "✗", "killed": "⏸"}
+METRIC_KEYS = ["val/best_pred_top1", "val/top1", "val/top5"]
+
+data = fetch()
+jobs = data.get("jobs", [])
+runs = data.get("runs", [])
+last_updated = data.get("lastUpdated")
+
+# ── Jobs ──────────────────────────────────────────────────────────────────────
+print(f"\n{BOLD}━━━  SLURM Jobs  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{RESET}")
+if not jobs:
+    print(f"  {GRAY}No jobs{RESET}")
+else:
+    for j in jobs:
+        c = STATE_COLOR.get(j["state"], GRAY)
+        gpu = f"  {j['gpuLabel']}" if j.get("gpuLabel") and j["gpuLabel"] != "CPU only" else ""
+        print(f"  {c}●{RESET} {BOLD}{j['name']:<28}{RESET}  #{j['id']:<10}  {j['timeUsed']}{gpu}")
+
+# ── WandB ─────────────────────────────────────────────────────────────────────
+print(f"\n{BOLD}━━━  WandB Runs  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{RESET}", end="")
+if last_updated:
+    print(f"  {GRAY}(updated {relative_time(last_updated)}){RESET}", end="")
+print()
+
+if not runs:
+    print(f"  {GRAY}No runs / app not yet polled{RESET}")
+else:
+    for r in runs:
+        c    = WANDB_COLOR.get(r["state"], GRAY)
+        icon = WANDB_ICON.get(r["state"], "?")
+        dur  = fmt_duration(r.get("duration", 0))
+        metrics = r.get("metrics", {})
+        metric_str = ""
+        for k in METRIC_KEYS:
+            if k in metrics:
+                metric_str = f"{k.split('/')[-1]}: {BOLD}{metrics[k]:.2f}%{RESET}"
+                break
+        print(f"  {c}{icon} {BOLD}{r['name']:<28}{RESET}  {dur:<8}  {metric_str}")
+
+print()

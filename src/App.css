@@ -1,0 +1,81 @@
+:root {
+  --system-font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+  --panel-radius: 12px;
+  --text-primary: rgba(0, 0, 0, 0.85);
+  --text-secondary: rgba(0, 0, 0, 0.45);
+  --system-green:  #34c759;
+  --system-orange: #ff9500;
+  --system-red:    #ff3b30;
+  --system-blue:   #007aff;
+  --system-yellow: #ffcc00;
+  --system-gray:   #8e8e93;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-primary: rgba(255, 255, 255, 0.85);
+    --text-secondary: rgba(255, 255, 255, 0.45);
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background: transparent;
+  font-family: var(--system-font);
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+#root {
+  width: 460px;
+  height: 680px;
+  background: transparent;
+}
+
+.panel {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--panel-radius);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.panel-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.panel-footer {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 6px 12px;
+  border-top: 1px solid rgba(128, 128, 128, 0.12);
+}
+
+.footer-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 3px 6px;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+  line-height: 1;
+}
+
+.footer-btn:hover {
+  color: var(--text-primary);
+  background: rgba(128, 128, 128, 0.12);
+}

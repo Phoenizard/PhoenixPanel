@@ -1,0 +1,244 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <!-- Background gradient: clean white -->
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="60%" stop-color="#f5f5f7"/>
+      <stop offset="100%" stop-color="#ebebed"/>
+    </radialGradient>
+
+    <!-- Central crimson glow -->
+    <radialGradient id="coreGlow" cx="50%" cy="48%" r="35%">
+      <stop offset="0%" stop-color="#ff3b30" stop-opacity="0.28"/>
+      <stop offset="50%" stop-color="#ff3b30" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#ff3b30" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Blue node glow -->
+    <radialGradient id="nodeGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#007aff" stop-opacity="1"/>
+      <stop offset="60%" stop-color="#007aff" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#007aff" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Amber line glow filter -->
+    <filter id="amberGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <!-- Node bloom filter -->
+    <filter id="nodeBloom" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <!-- Soft glow for phoenix body -->
+    <filter id="phoenixGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="14" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <!-- macOS Big Sur rounded square clip -->
+    <clipPath id="roundedSquare">
+      <rect width="1024" height="1024" rx="225" ry="225"/>
+    </clipPath>
+
+    <!-- Line gradient: amber with fade -->
+    <linearGradient id="lineAB" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff9500" stop-opacity="0.15"/>
+      <stop offset="50%" stop-color="#ff9500" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#ff9500" stop-opacity="0.15"/>
+    </linearGradient>
+  </defs>
+
+  <!-- === CANVAS === -->
+  <g clip-path="url(#roundedSquare)">
+
+    <!-- Background -->
+    <rect width="1024" height="1024" fill="url(#bgGrad)"/>
+
+    <!-- Subtle star field (hidden on white bg) -->
+    <g opacity="0" fill="#ffffff">
+      <circle cx="120" cy="90" r="1.2"/><circle cx="340" cy="60" r="0.9"/>
+      <circle cx="600" cy="45" r="1.4"/><circle cx="820" cy="110" r="0.8"/>
+      <circle cx="950" cy="70" r="1.1"/><circle cx="80" cy="300" r="0.9"/>
+      <circle cx="960" cy="250" r="1.3"/><circle cx="180" cy="500" r="0.7"/>
+      <circle cx="900" cy="480" r="1.0"/><circle cx="60" cy="700" r="1.2"/>
+      <circle cx="980" cy="650" r="0.8"/><circle cx="150" cy="870" r="1.1"/>
+      <circle cx="760" cy="950" r="0.9"/><circle cx="430" cy="970" r="1.3"/>
+      <circle cx="260" cy="200" r="0.8"/><circle cx="750" cy="180" r="1.0"/>
+      <circle cx="490" cy="130" r="0.6"/><circle cx="870" cy="360" r="1.2"/>
+      <circle cx="100" cy="600" r="0.7"/><circle cx="920" cy="800" r="0.9"/>
+    </g>
+
+    <!-- Central crimson halo (phoenix heart) -->
+    <ellipse cx="512" cy="490" rx="340" ry="300" fill="url(#coreGlow)"/>
+
+    <!-- ===================== -->
+    <!-- PHOENIX SILHOUETTE    -->
+    <!-- Faint, geometric, flat — traced from node layout -->
+    <!-- ===================== -->
+
+    <!-- Phoenix body: warm ember glow layer (very subtle) -->
+    <g filter="url(#phoenixGlow)" opacity="0.18">
+      <!-- Body core -->
+      <path d="M512 680 C480 620 440 560 460 490 C420 530 400 580 420 630 C390 580 380 520 400 460 C420 400 460 360 512 340 C500 380 510 410 530 430 C520 390 530 360 560 340 C600 380 610 430 590 470 C620 440 620 400 605 365 C640 420 640 490 610 540 C630 510 628 475 615 455 C625 500 615 550 590 590 C575 620 545 660 512 680Z"
+            fill="#ff6b20"/>
+      <!-- Left wing -->
+      <path d="M460 490 C430 470 395 455 360 420 C380 450 410 468 440 478Z" fill="#ff9500"/>
+      <!-- Right wing -->
+      <path d="M560 490 C590 470 625 455 660 420 C640 450 610 468 580 478Z" fill="#ff9500"/>
+      <!-- Tail feathers suggestion -->
+      <path d="M490 680 C470 720 450 760 440 800 M512 680 C512 730 510 780 508 820 M534 680 C554 720 574 760 584 800"
+            stroke="#ff6b20" stroke-width="8" fill="none" stroke-linecap="round"/>
+    </g>
+
+    <!-- ===================== -->
+    <!-- NETWORK CONNECTIONS   -->
+    <!-- Amber trails, geometric -->
+    <!-- ===================== -->
+
+    <!-- Primary structural lines forming the phoenix wing-span -->
+    <g filter="url(#amberGlow)" stroke="url(#lineAB)" fill="none" stroke-linecap="round">
+
+      <!-- Left wing upper arc -->
+      <path d="M512 345 L375 290" stroke="#ff9500" stroke-width="1.8" opacity="0.9"/>
+      <path d="M375 290 L245 340" stroke="#ff9500" stroke-width="1.5" opacity="0.75"/>
+      <path d="M245 340 L175 440" stroke="#ff9500" stroke-width="1.3" opacity="0.6"/>
+      <path d="M175 440 L200 560" stroke="#ff9500" stroke-width="1.2" opacity="0.5"/>
+
+      <!-- Left wing lower -->
+      <path d="M512 490 L380 460" stroke="#ff9500" stroke-width="2.0" opacity="0.9"/>
+      <path d="M380 460 L280 500" stroke="#ff9500" stroke-width="1.6" opacity="0.75"/>
+      <path d="M280 500 L215 600" stroke="#ff9500" stroke-width="1.3" opacity="0.6"/>
+
+      <!-- Right wing upper arc -->
+      <path d="M512 345 L649 290" stroke="#ff9500" stroke-width="1.8" opacity="0.9"/>
+      <path d="M649 290 L779 340" stroke="#ff9500" stroke-width="1.5" opacity="0.75"/>
+      <path d="M779 340 L849 440" stroke="#ff9500" stroke-width="1.3" opacity="0.6"/>
+      <path d="M849 440 L824 560" stroke="#ff9500" stroke-width="1.2" opacity="0.5"/>
+
+      <!-- Right wing lower -->
+      <path d="M512 490 L644 460" stroke="#ff9500" stroke-width="2.0" opacity="0.9"/>
+      <path d="M644 460 L744 500" stroke="#ff9500" stroke-width="1.6" opacity="0.75"/>
+      <path d="M744 500 L809 600" stroke="#ff9500" stroke-width="1.3" opacity="0.6"/>
+
+      <!-- Body spine -->
+      <path d="M512 345 L512 490" stroke="#ff9500" stroke-width="2.2" opacity="0.95"/>
+      <path d="M512 490 L512 640" stroke="#ff9500" stroke-width="2.0" opacity="0.9"/>
+
+      <!-- Tail feather lines -->
+      <path d="M512 640 L460 760" stroke="#ff9500" stroke-width="1.4" opacity="0.65"/>
+      <path d="M512 640 L512 780" stroke="#ff9500" stroke-width="1.4" opacity="0.7"/>
+      <path d="M512 640 L564 760" stroke="#ff9500" stroke-width="1.4" opacity="0.65"/>
+      <path d="M512 640 L430 820" stroke="#ff9500" stroke-width="1.0" opacity="0.45"/>
+      <path d="M512 640 L594 820" stroke="#ff9500" stroke-width="1.0" opacity="0.45"/>
+
+      <!-- Cross-connects (constellation feel) -->
+      <path d="M375 290 L512 490" stroke="#ff9500" stroke-width="1.0" opacity="0.45"/>
+      <path d="M649 290 L512 490" stroke="#ff9500" stroke-width="1.0" opacity="0.45"/>
+      <path d="M245 340 L380 460" stroke="#ff9500" stroke-width="0.9" opacity="0.38"/>
+      <path d="M779 340 L644 460" stroke="#ff9500" stroke-width="0.9" opacity="0.38"/>
+      <path d="M175 440 L280 500" stroke="#ff9500" stroke-width="0.8" opacity="0.3"/>
+      <path d="M849 440 L744 500" stroke="#ff9500" stroke-width="0.8" opacity="0.3"/>
+
+      <!-- Head crest lines -->
+      <path d="M512 345 L480 220" stroke="#ff9500" stroke-width="1.3" opacity="0.6"/>
+      <path d="M512 345 L512 200" stroke="#ff9500" stroke-width="1.5" opacity="0.7"/>
+      <path d="M512 345 L544 220" stroke="#ff9500" stroke-width="1.3" opacity="0.6"/>
+      <path d="M480 220 L512 200" stroke="#ff9500" stroke-width="1.0" opacity="0.5"/>
+      <path d="M544 220 L512 200" stroke="#ff9500" stroke-width="1.0" opacity="0.5"/>
+
+      <!-- Secondary outer constellation -->
+      <path d="M245 340 L175 220" stroke="#ff9500" stroke-width="0.9" opacity="0.35"/>
+      <path d="M779 340 L849 220" stroke="#ff9500" stroke-width="0.9" opacity="0.35"/>
+      <path d="M200 560 L155 680" stroke="#ff9500" stroke-width="0.8" opacity="0.3"/>
+      <path d="M824 560 L869 680" stroke="#ff9500" stroke-width="0.8" opacity="0.3"/>
+    </g>
+
+    <!-- ===================== -->
+    <!-- NETWORK NODES         -->
+    <!-- Blue glowing dots     -->
+    <!-- ===================== -->
+
+    <!-- Node bloom halos -->
+    <g filter="url(#nodeBloom)" opacity="0.5">
+      <!-- Major nodes -->
+      <circle cx="512" cy="200" r="18" fill="#007aff"/>
+      <circle cx="512" cy="345" r="22" fill="#007aff"/>
+      <circle cx="512" cy="490" r="20" fill="#007aff"/>
+      <circle cx="375" cy="290" r="16" fill="#007aff"/>
+      <circle cx="649" cy="290" r="16" fill="#007aff"/>
+      <circle cx="380" cy="460" r="14" fill="#007aff"/>
+      <circle cx="644" cy="460" r="14" fill="#007aff"/>
+      <!-- Tail -->
+      <circle cx="512" cy="640" r="16" fill="#007aff"/>
+      <!-- Outer wing tips -->
+      <circle cx="175" cy="440" r="12" fill="#007aff"/>
+      <circle cx="849" cy="440" r="12" fill="#007aff"/>
+    </g>
+
+    <!-- Node crisp dots (rendered on top) -->
+    <g>
+      <!-- Head crest top -->
+      <circle cx="512" cy="200" r="7" fill="#0066dd"/>
+      <circle cx="480" cy="220" r="5" fill="#0055cc"/>
+      <circle cx="544" cy="220" r="5" fill="#0055cc"/>
+
+      <!-- Neck / head base -->
+      <circle cx="512" cy="345" r="10" fill="#0070f0"/>
+
+      <!-- Core / heart -->
+      <circle cx="512" cy="490" r="9" fill="#0077ff"/>
+
+      <!-- Left wing nodes -->
+      <circle cx="375" cy="290" r="7" fill="#0066dd"/>
+      <circle cx="245" cy="340" r="6" fill="#0055cc"/>
+      <circle cx="175" cy="440" r="5.5" fill="#0044aa"/>
+      <circle cx="200" cy="560" r="5" fill="#003d99"/>
+      <circle cx="215" cy="600" r="4.5" fill="#003388"/>
+      <circle cx="280" cy="500" r="5.5" fill="#0055cc"/>
+      <circle cx="380" cy="460" r="6.5" fill="#0066dd"/>
+
+      <!-- Right wing nodes -->
+      <circle cx="649" cy="290" r="7" fill="#0066dd"/>
+      <circle cx="779" cy="340" r="6" fill="#0055cc"/>
+      <circle cx="849" cy="440" r="5.5" fill="#0044aa"/>
+      <circle cx="824" cy="560" r="5" fill="#003d99"/>
+      <circle cx="809" cy="600" r="4.5" fill="#003388"/>
+      <circle cx="744" cy="500" r="5.5" fill="#0055cc"/>
+      <circle cx="644" cy="460" r="6.5" fill="#0066dd"/>
+
+      <!-- Outer constellation extras -->
+      <circle cx="175" cy="220" r="4" fill="#003d99"/>
+      <circle cx="849" cy="220" r="4" fill="#003d99"/>
+      <circle cx="155" cy="680" r="3.5" fill="#002f80"/>
+      <circle cx="869" cy="680" r="3.5" fill="#002f80"/>
+
+      <!-- Tail node cluster -->
+      <circle cx="512" cy="640" r="7.5" fill="#0066dd"/>
+      <circle cx="460" cy="760" r="5" fill="#0055cc"/>
+      <circle cx="512" cy="780" r="5.5" fill="#0055cc"/>
+      <circle cx="564" cy="760" r="5" fill="#0055cc"/>
+      <circle cx="430" cy="820" r="3.5" fill="#0044aa"/>
+      <circle cx="594" cy="820" r="3.5" fill="#0044aa"/>
+
+      <!-- Bright node cores (inner highlight) -->
+      <circle cx="512" cy="345" r="3.5" fill="#ffffff" opacity="0.9"/>
+      <circle cx="512" cy="490" r="3" fill="#ffffff" opacity="0.8"/>
+      <circle cx="512" cy="200" r="2.5" fill="#ffffff" opacity="0.85"/>
+      <circle cx="375" cy="290" r="2.5" fill="#e0f0ff" opacity="0.9"/>
+      <circle cx="649" cy="290" r="2.5" fill="#e0f0ff" opacity="0.9"/>
+      <circle cx="512" cy="640" r="2.5" fill="#e0f0ff" opacity="0.85"/>
+    </g>
+
+    <!-- Final: subtle vignette overlay -->
+    <radialGradient id="vignette" cx="50%" cy="50%" r="70%">
+      <stop offset="55%" stop-color="#e8e8ea" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#d8d8da" stop-opacity="0.3"/>
+    </radialGradient>
+    <rect width="1024" height="1024" rx="225" ry="225" fill="url(#vignette)"/>
+
+  </g>
+</svg>
