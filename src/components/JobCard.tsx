@@ -14,6 +14,7 @@ const LOG_PATH = (jobId: string, username: string) =>
 
 export function JobCard({ job, expandedJobId, onExpandLog }: Props) {
   const [copied, setCopied] = useState(false)
+  const [copiedId, setCopiedId] = useState(false)
   const [progress, setProgress] = useState<{ current: number; total: number } | null>(null)
   const isExpanded = expandedJobId === job.id
 
@@ -68,6 +69,16 @@ export function JobCard({ job, expandedJobId, onExpandLog }: Props) {
       <div className="job-card-actions">
         <button className="action-btn" onClick={handleCopyScancel}>
           {copied ? '✓ 已复制' : `复制 scancel ${job.id}`}
+        </button>
+        <button
+          className={`action-btn${copiedId ? ' action-btn-active' : ''}`}
+          onClick={() => {
+            window.phoenixAPI.clipboard.write(job.id)
+            setCopiedId(true)
+            setTimeout(() => setCopiedId(false), 1500)
+          }}
+        >
+          {copiedId ? '✓' : '复制 ID'}
         </button>
         <button
           className={`action-btn ${isExpanded ? 'action-btn-active' : ''}`}

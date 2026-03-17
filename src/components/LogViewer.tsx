@@ -15,6 +15,7 @@ export function LogViewer({ jobId, onClose }: Props) {
   const [filePath, setFilePath] = useState('')
   const [pathInput, setPathInput] = useState('')
   const [streaming, setStreaming] = useState(false)
+  const [fileType, setFileType] = useState<'out' | 'err'>('out')
   const [autoScroll, setAutoScroll] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [notFound, setNotFound] = useState(false)
@@ -34,7 +35,15 @@ export function LogViewer({ jobId, onClose }: Props) {
     }
   }, [jobId])
 
-  // Subscribe to IPC events
+  const handleSwitchType = async (type: 'out' | 'err') => {
+    if (type === fileType) return
+    await window.phoenixAPI.logs.stopStream()
+    setLines([])
+    setFileType(type)
+    setStreaming(false)
+  }
+
+  // Subscribe to IPC events; re-run on fileType change to restart stream
   useEffect(() => {
     const offLine = window.phoenixAPI.logs.onLine((id, newLines) => {
       if (id !== jobId) return
@@ -62,7 +71,8 @@ export function LogViewer({ jobId, onClose }: Props) {
 
     // Resolve username then start stream
     window.phoenixAPI.ssh.getStatus().then(({ username }) => {
-      const path = DEFAULT_PATH(jobId, username)
+      const basePath = DEFAULT_PATH(jobId, username)
+      const path = fileType === 'out' ? basePath : basePath.replace(/\.out$/, '.err')
       setFilePath(path)
       setPathInput(path)
       startStream(path)
@@ -74,7 +84,7 @@ export function LogViewer({ jobId, onClose }: Props) {
       offEnded()
       window.phoenixAPI.logs.stopStream()
     }
-  }, [jobId, filePath, startStream])
+  }, [jobId, fileType, startStream])
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -103,6 +113,16 @@ export function LogViewer({ jobId, onClose }: Props) {
     <div className="log-viewer">
       <div className="log-toolbar">
         <span className="log-filepath" title={filePath}>{filePath}</span>
+        <div className="log-tabs">
+          <button
+            className={`log-tab${fileType === 'out' ? ' log-tab-active' : ''}`}
+            onClick={() => handleSwitchType('out')}
+          >.out</button>
+          <button
+            className={`log-tab${fileType === 'err' ? ' log-tab-active' : ''}`}
+            onClick={() => handleSwitchType('err')}
+          >.err</button>
+        </div>
         <div className="log-actions">
           <button
             className="log-btn"

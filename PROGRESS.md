@@ -14,9 +14,10 @@
 | 4 | 日志查看器（SSH tail -f）| ✅ 已完成 | 2026-03-03 |
 | 5 | 存储配额 + 快速命令面板 | ✅ 已完成 | 2026-03-03 |
 | 6 | 偏好设置面板 | ✅ 已完成 | 2026-03-03 |
-| 7 | 论文进度 Widget（NeurIPS DDL + Notion）| ⬜ 未开始 | — |
-| 8 | Markdown 阅览器（P2，可选）| ⬜ 未开始 | — |
-| 9 | 打包 & 收尾（.dmg）| ⬜ 未开始 | — |
+| 7 | 论文进度 Widget（NeurIPS DDL + Notion）| ~~取消~~ | — |
+| 8 | Markdown 阅览器（P2，可选）| ~~取消~~ | — |
+| 9 | 打包 & 收尾（.dmg）| ✅ 已完成 | 2026-03-17 |
+| 10 | Job 卡片 & 日志查看器增强 | ✅ 已完成 | 2026-03-17 |
 
 状态标记：⬜ 未开始 · 🔄 进行中 · ✅ 已完成 · ⚠️ 有问题
 
@@ -74,17 +75,29 @@
 ---
 
 ### Phase 7 — 论文进度 Widget
-- **状态**：⬜ 未开始
-- **备注**：—
+- **状态**：~~取消~~
+- **备注**：用户决定不实现。
 
 ---
 
 ### Phase 8 — Markdown 阅览器（P2）
-- **状态**：⬜ 未开始
-- **备注**：—
+- **状态**：~~取消~~
+- **备注**：用户决定不实现。
 
 ---
 
 ### Phase 9 — 打包 & 收尾
-- **状态**：⬜ 未开始
-- **备注**：—
+- **状态**：✅ 已完成
+- **完成时间**：2026-03-17（追溯）
+- **备注**：dist/ 目录已包含 PhoenixPanel-0.0.0-arm64.dmg、PhoenixPanel-0.0.0.dmg、mac-arm64/ 应用目录、icon.icns。App 已在 macOS 以应用程序形式运行。PROGRESS.md 未及时更新，现补记。
+
+---
+
+### Phase 10 — Job 卡片 & 日志查看器增强
+- **状态**：✅ 已完成
+- **完成时间**：2026-03-17
+- **需求来源**：日常使用反馈
+- **改动**：
+  1. **复制纯 Job ID 按钮**：JobCard 新增独立 `copiedId` state，"复制 scancel"右侧增加"复制 ID"按钮，点击仅写入纯数字 Job ID，1.5 秒后复位
+  2. **日志文本可选中/复制**：LogViewer.css `.log-body` 和 `.log-line` 加 `user-select: text; -webkit-user-select: text`，支持鼠标拖拽选中及 Cmd+C
+  3. **.out / .err Tab 切换**：LogViewer 新增 `fileType` state，toolbar 中间插入 `.out`/`.err` Tab 按钮，切换时自动 stopStream → 清空 lines → 用新路径重启 stream

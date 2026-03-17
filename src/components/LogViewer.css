@@ -67,6 +67,9 @@
   font-size: 11px;
   line-height: 1.5;
   color: rgba(255,255,255,0.82);
+  user-select: text;
+  -webkit-user-select: text;
+  cursor: text;
 }
 
 .log-body::-webkit-scrollbar {
@@ -83,6 +86,31 @@
 .log-line {
   white-space: pre-wrap;
   word-break: break-all;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.log-tabs {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.log-tab {
+  font-size: 10px;
+  font-family: 'SF Mono', monospace;
+  padding: 1px 6px;
+  border-radius: 3px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: transparent;
+  color: rgba(255,255,255,0.4);
+  cursor: pointer;
+}
+
+.log-tab-active {
+  background: rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.85);
+  border-color: rgba(255,255,255,0.25);
 }
 
 .log-hint {
