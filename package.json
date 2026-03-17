@@ -55,7 +55,6 @@
     ],
     "extraResources": [
       { "from": "scripts/phoenix", "to": "phoenix" }
-    ],
-    "nativeRebuilder": "sequential"
+    ]
   }
 }
