@@ -19,6 +19,16 @@ export interface StorageResult {
 
 export interface CustomCommand { id: string; label: string; command: string }
 
+export interface HistoryJob {
+  id: string
+  name: string
+  partition: string
+  gpuLabel: string
+  state: 'COMPLETED' | 'FAILED' | 'CANCELLED'
+  elapsed: string
+  endTime: string
+}
+
 export interface AppConfig {
   ssh: { host: string; username: string }
   wandb: { entity: string; project: string }
@@ -39,7 +49,9 @@ declare global {
         testConnection: () => Promise<{ ok: boolean; message: string }>
       }
       jobs: {
-        getAll: () => Promise<{ ok: boolean; jobs: Job[]; error?: string }>
+        getAll:      () => Promise<{ ok: boolean; jobs: Job[]; error?: string }>
+        initHistory: () => Promise<HistoryJob[]>
+        getHistory:  () => Promise<HistoryJob[]>
       }
       wandb: {
         getRuns:   () => Promise<{ ok: boolean; runs: WandBRun[]; error?: string }>

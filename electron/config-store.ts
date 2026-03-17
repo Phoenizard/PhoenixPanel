@@ -1,6 +1,16 @@
 // Centralized config using electron-store v8
 // All non-sensitive settings live here; secrets go to Keychain via keytar
 
+export interface HistoryJob {
+  id: string
+  name: string
+  partition: string
+  gpuLabel: string
+  state: 'COMPLETED' | 'FAILED' | 'CANCELLED'
+  elapsed: string   // "2:30:15"
+  endTime: string   // ISO 8601
+}
+
 export interface AppConfig {
   ssh: {
     host: string
@@ -26,6 +36,7 @@ export interface AppConfig {
     homeLimitGB: number
   }
   customCommands: Array<{ id: string; label: string; command: string }>
+  jobHistory: HistoryJob[]
 }
 
 const DEFAULTS: AppConfig = {
@@ -35,6 +46,7 @@ const DEFAULTS: AppConfig = {
   notifications: { runFinished: true, runCrashed: true, jobFailed: true, sshDisconnected: true },
   storage: { scratchPath: '', scratchLimitGB: 200, homeLimitGB: 50 },
   customCommands: [],
+  jobHistory: [],
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

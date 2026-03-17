@@ -5,6 +5,7 @@ import { wandbService } from './wandb-service'
 import { logStreamer } from './log-streamer'
 import { storageService } from './storage-service'
 import { getConfig, setConfig, getConfigKey, setConfigKey } from './config-store'
+import type { HistoryJob } from './config-store'
 
 const KEYCHAIN_SERVICE = 'PhoenixPanel'
 const KEYCHAIN_WANDB   = 'wandb-api-key'
@@ -14,6 +15,37 @@ let _cachedJobs: import('./job-parser').Job[] = []
 export function getCachedJobs() { return _cachedJobs }
 
 const _prevJobStates = new Map<string, string>()
+
+function normalizeState(state: string): HistoryJob['state'] | null {
+  if (state.startsWith('COMPLETED')) return 'COMPLETED'
+  if (state.startsWith('FAILED')) return 'FAILED'
+  if (state.startsWith('CANCELLED')) return 'CANCELLED'
+  return null
+}
+
+function parseEndTime(end: string): string {
+  if (!end || end === 'Unknown') return new Date().toISOString()
+  try {
+    // sacct End format: 2026-03-17T14:23:45
+    return new Date(end).toISOString()
+  } catch {
+    return new Date().toISOString()
+  }
+}
+
+function parseSacctRow(raw: string, fallback: import('./job-parser').Job): HistoryJob | null {
+  const lines = raw.split('\n').filter(l => l.trim())
+  for (const line of lines) {
+    const parts = line.trim().split(/\s+/)
+    if (parts.length < 6) continue
+    const [id, name, partition, state, elapsed, end] = parts
+    if (id.includes('.')) continue
+    const normalState = normalizeState(state)
+    if (!normalState) continue
+    return { id, name: name || fallback.name, partition: partition || fallback.partition, gpuLabel: fallback.gpuLabel || '', state: normalState, elapsed, endTime: parseEndTime(end) }
+  }
+  return null
+}
 
 export function registerIpcHandlers(getWin: () => BrowserWindow | null) {
   // ── SSH ──────────────────────────────────────────────────────────────────
@@ -43,6 +75,27 @@ export function registerIpcHandlers(getWin: () => BrowserWindow | null) {
       )
       const jobs = parseJobs(raw)
 
+      // Detect disappeared jobs and record them to history
+      const disappeared = _cachedJobs.filter(j => !jobs.find(nj => nj.id === j.id))
+      if (disappeared.length > 0) {
+        const existing = await getConfigKey('jobHistory')
+        let history = [...existing]
+        for (const dj of disappeared) {
+          try {
+            const sacctRaw = await sshManager.executeCommand(
+              `sacct -j ${dj.id} --format=JobID,JobName,Partition,State,Elapsed,End --noheader -n`
+            )
+            const parsed = parseSacctRow(sacctRaw, dj)
+            if (parsed) {
+              history = history.filter(h => h.id !== parsed.id)
+              history.unshift(parsed)
+              history = history.slice(0, 6)
+            }
+          } catch { /* ignore individual lookup errors */ }
+        }
+        await setConfigKey('jobHistory', history)
+      }
+
       // Notify on job state transitions
       for (const job of jobs) {
         const prev = _prevJobStates.get(job.id)
@@ -63,6 +116,46 @@ export function registerIpcHandlers(getWin: () => BrowserWindow | null) {
     } catch (err: unknown) {
       return { ok: false, jobs: [], error: err instanceof Error ? err.message : String(err) }
     }
+  })
+
+  ipcMain.handle('jobs:init-history', async () => {
+    try {
+      const username = sshManager.getUsername()
+      const raw = await sshManager.executeCommand(
+        `sacct -u ${username} --format=JobID,JobName,Partition,State,Elapsed,End --noheader -n --starttime=now-7days`
+      )
+      const lines = raw.split('\n').filter(l => l.trim())
+      const fetched: HistoryJob[] = []
+      for (const line of lines) {
+        const parts = line.trim().split(/\s+/)
+        if (parts.length < 6) continue
+        const [id, name, partition, state, elapsed, end] = parts
+        // Skip sub-jobs and non-terminal states
+        if (id.includes('.')) continue
+        if (['RUNNING', 'PENDING', 'batch', 'extern'].some(s => state.includes(s))) continue
+        const normalState = normalizeState(state)
+        if (!normalState) continue
+        fetched.push({ id, name, partition, gpuLabel: '', state: normalState, elapsed, endTime: parseEndTime(end) })
+      }
+      // Take latest 6
+      const fresh = fetched.slice(0, 6)
+      const existing = await getConfigKey('jobHistory')
+      // Merge: fresh entries win, dedup by id, keep at most 6 sorted by endTime desc
+      const merged = [...fresh]
+      for (const h of existing) {
+        if (!merged.find(m => m.id === h.id)) merged.push(h)
+      }
+      merged.sort((a, b) => b.endTime.localeCompare(a.endTime))
+      const final = merged.slice(0, 6)
+      await setConfigKey('jobHistory', final)
+      return final
+    } catch (err: unknown) {
+      return []
+    }
+  })
+
+  ipcMain.handle('jobs:get-history', async () => {
+    return getConfigKey('jobHistory')
   })
 
   // ── WandB ─────────────────────────────────────────────────────────────────

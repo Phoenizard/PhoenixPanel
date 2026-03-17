@@ -14,7 +14,9 @@ contextBridge.exposeInMainWorld('phoenixAPI', {
   },
 
   jobs: {
-    getAll: () => ipcRenderer.invoke('jobs:get-all'),
+    getAll:      () => ipcRenderer.invoke('jobs:get-all'),
+    initHistory: () => ipcRenderer.invoke('jobs:init-history'),
+    getHistory:  () => ipcRenderer.invoke('jobs:get-history'),
   },
 
   wandb: {

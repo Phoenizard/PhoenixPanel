@@ -81,3 +81,26 @@
   0%, 100% { opacity: 1; }
   50%       { opacity: 0.5; }
 }
+
+.board-tabs {
+  display: flex;
+  gap: 2px;
+}
+
+.board-tab {
+  font-size: 11px;
+  font-family: var(--system-font);
+  padding: 2px 8px;
+  border-radius: 5px;
+  border: 1px solid rgba(128, 128, 128, 0.2);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+
+.board-tab-active {
+  background: rgba(128, 128, 128, 0.15);
+  color: var(--text-primary);
+  border-color: rgba(128, 128, 128, 0.35);
+}

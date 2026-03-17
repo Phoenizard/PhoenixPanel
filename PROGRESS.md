@@ -18,6 +18,7 @@
 | 8 | Markdown 阅览器（P2，可选）| ~~取消~~ | — |
 | 9 | 打包 & 收尾（.dmg）| ✅ 已完成 | 2026-03-17 |
 | 10 | Job 卡片 & 日志查看器增强 | ✅ 已完成 | 2026-03-17 |
+| 11 | Job 历史记录 | ✅ 已完成 | 2026-03-17 |
 
 状态标记：⬜ 未开始 · 🔄 进行中 · ✅ 已完成 · ⚠️ 有问题
 
@@ -90,6 +91,16 @@
 - **状态**：✅ 已完成
 - **完成时间**：2026-03-17（追溯）
 - **备注**：dist/ 目录已包含 PhoenixPanel-0.0.0-arm64.dmg、PhoenixPanel-0.0.0.dmg、mac-arm64/ 应用目录、icon.icns。App 已在 macOS 以应用程序形式运行。PROGRESS.md 未及时更新，现补记。
+
+---
+
+### Phase 11 — Job 历史记录
+- **状态**：✅ 已完成
+- **完成时间**：2026-03-17
+- **改动**：
+  1. **数据结构**：`config-store.ts` 新增 `HistoryJob` interface，`AppConfig` 加 `jobHistory: HistoryJob[]`（默认 `[]`，最多 6 条）
+  2. **后端 IPC**：`jobs:init-history`（启动时 sacct 加载近 7 天历史）、`jobs:get-history`（读 store）、`jobs:get-all` 扩展检测消失 job 并补查 sacct 写入历史
+  3. **前端**：JobBoard 新增 当前/历史 Tab；`HistoryCard.tsx` 显示状态色点、job 名、ID、elapsed、相对时间、partition、state
 
 ---
 
